@@ -7,7 +7,6 @@ public class Main {
 	
 	public static void main(String[] args) {
 		ArrayList<Stagiaire> stagiaires = new ArrayList<>();
-		
 		stagiaires.add( new Stagiaire("John", 'M', true, false) );
 		stagiaires.add( new Stagiaire("Max", 'M', true, false) );
 		stagiaires.add( new Stagiaire("Bob", 'M', false, false) );
@@ -26,190 +25,297 @@ public class Main {
 		stagiaires.add( new Stagiaire("Zoé", 'F', false, true) );
 		stagiaires.add( new Stagiaire("Zara", 'F', false, true) );
 		
+		System.out.println(obtenirGroupeADistance(stagiaires).size());
+		System.out.println(obtenirGroupeSurPlace(stagiaires).size());
+		
+		tirage(stagiaires);
+		
+////		Initialiser les valeurs
+//		ArrayList<Stagiaire> listeUtilise = stagiaires;
+//		int nombreParGroupeMaximum = 3;
+//		int nbGroupe = (int) Math.ceil((double) listeUtilise.size() / nombreParGroupeMaximum);
+//		
+//		System.out.println("Nombre de listeUtilise : " + listeUtilise.size());
+//		System.out.println("Nombre de groupes : " + nbGroupe);
+//		
+//		
+////		Creer l'ensemble de groupes vide
+//		ArrayList< ArrayList<Stagiaire> > groupes = new ArrayList<>();
+//		for(int i = 0; i < nbGroupe; i++) {
+//			groupes.add(new ArrayList<Stagiaire>());
+//		}
+//		
+////		Liste de fille
+//		ArrayList<Stagiaire> stagiairesF = new ArrayList<>();
+//		ArrayList<Stagiaire> stagiairesM = new ArrayList<>();
+//		for(Stagiaire s : listeUtilise) {
+//			if(s.getSexe() == 'F') {
+//				stagiairesF.add(s);
+//			} else {
+//				stagiairesM.add(s);
+//			}
+//		}
+//
+////		Liste de CDA
+//		ArrayList<Stagiaire> stagiairesCDA = new ArrayList<>();
+//		ArrayList<Stagiaire> stagiairesD2WM = new ArrayList<>();
+//		for(Stagiaire s : listeUtilise) {
+//			if(s.isCda() == true) {
+//				stagiairesCDA.add(s);
+//			} else {
+//				stagiairesD2WM.add(s);
+//			}
+//		}
+//		
+////		Insertion & équilibrage
+//		groupes = insererStagiaireDansGroupe(stagiairesCDA, groupes, false);
+//		groupes = insererStagiaireDansGroupe(stagiairesF, groupes, true);
+//		groupes = insererStagiaireDansGroupe(stagiairesM, groupes, false);
+//		groupes = insererStagiaireDansGroupe(stagiairesD2WM, groupes, true);
+//		
+//		groupes = equilibrerGroupes(groupes, nombreParGroupeMaximum);
+//		
+//		afficherGroupes(groupes, 0);
+		
+	}
+
+	/**
+	 * Effectue le tirage sur une liste de stagiaires
+	 * 
+	 * @param stagiaires : liste des stagiaires à tirée
+	 */
+	public static void tirage(ArrayList<Stagiaire> stagiaires) {
+//		Initialiser les valeurs
+		ArrayList<Stagiaire> listeUtilise = (ArrayList<Stagiaire>) stagiaires.clone();
 		int nombreParGroupeMaximum = 3;
+		int nbGroupe = (int) Math.ceil((double) listeUtilise.size() / nombreParGroupeMaximum);
 		
-//		int nbGroupe = obtenirTotalGroupeSurPlace(stagiaires, 3);
-		System.out.println("Nombre de stagiaires : " + stagiaires.size());
-		int nbGroupe = (int) Math.ceil((double) stagiaires.size() / nombreParGroupeMaximum);
-		System.out.println("Nombre de groupe : " + nbGroupe);
+		System.out.println("Nombre de listeUtilise : " + listeUtilise.size());
+		System.out.println("Nombre de groupes : " + nbGroupe);
 		
-//		Creer les groupes vide
-		ArrayList< ArrayList<Stagiaire> > groupe = new ArrayList<>();
+		
+//		Creer l'ensemble de groupes vide
+		ArrayList< ArrayList<Stagiaire> > groupes = new ArrayList<>();
 		for(int i = 0; i < nbGroupe; i++) {
-			groupe.add(new ArrayList<Stagiaire>());
+			groupes.add(new ArrayList<Stagiaire>());
 		}
 		
 //		Liste de fille
 		ArrayList<Stagiaire> stagiairesF = new ArrayList<>();
 		ArrayList<Stagiaire> stagiairesM = new ArrayList<>();
-		for(Stagiaire s : stagiaires) {
+		for(Stagiaire s : listeUtilise) {
 			if(s.getSexe() == 'F') {
 				stagiairesF.add(s);
-//				System.out.println(s);
 			} else {
 				stagiairesM.add(s);
 			}
 		}
 
-		System.out.println("Nombre de fille : " + stagiairesF.size());
-		groupe = insererStagiaireDansGroupe((ArrayList<Stagiaire>) stagiairesF.clone(), (ArrayList< ArrayList<Stagiaire> >) groupe.clone(), true);
-		
 //		Liste de CDA
 		ArrayList<Stagiaire> stagiairesCDA = new ArrayList<>();
 		ArrayList<Stagiaire> stagiairesD2WM = new ArrayList<>();
-		for(Stagiaire s : stagiaires) {
+		for(Stagiaire s : listeUtilise) {
 			if(s.isCda() == true) {
 				stagiairesCDA.add(s);
 			} else {
 				stagiairesD2WM.add(s);
 			}
 		}
-//		System.out.println("Nombre de CDA : " + stagiairesCDA.size());
-		groupe = insererStagiaireDansGroupe((ArrayList<Stagiaire>) stagiairesCDA.clone(), (ArrayList< ArrayList<Stagiaire> >) groupe.clone(), true);
-//		groupe = insererStagiaireDansGroupe(stagiairesM, groupe, false);
 		
-//		DEV verifie les doubons
-//		int i = 0;
-//		for(Stagiaire f : stagiairesF) {			
-//			for(Stagiaire cda : stagiairesCDA) {
-//				if(f.equals(cda)) {
-//					i++;
-//					System.out.println("Doublons : " + f);
-//				}
-//			}
-//		}
-//		System.out.println(i + " doublons");
+//		Insertion & équilibrage
+		groupes = insererStagiaireDansGroupe(stagiairesCDA, groupes, false);
+		groupes = insererStagiaireDansGroupe(stagiairesF, groupes, true);
+		groupes = insererStagiaireDansGroupe(stagiairesM, groupes, false);
+		groupes = insererStagiaireDansGroupe(stagiairesD2WM, groupes, true);
 		
-//		Affihcher les groupes
-		for(ArrayList<Stagiaire> g : groupe) {
-			System.out.println(g.size() + " => " + g);
-		}
-	}
-	
-	public static int obtenirTotalGroupe(ArrayList<Stagiaire> stagiaires, int nombreParGroupe) {
-		System.out.println("Nombre total : " + stagiaires.size());		
-//		Nombre de groupe
-		return (int) Math.ceil((double) stagiaires.size() / nombreParGroupe);
-	}
-	public static int obtenirTotalGroupeADistance(ArrayList<Stagiaire> stagiaires, int nombreParGroupe) {
-		int nombreDistance = 0;
-		for(Stagiaire e : stagiaires) {
-			if(e.isaDistance() == true) {
-				nombreDistance++;
-			}
-		}
-		System.out.println("Nombre total : " + stagiaires.size());
-		System.out.println("Nombre à distance : " + nombreDistance);
+		groupes = equilibrerGroupes(groupes, nombreParGroupeMaximum);
 		
-//		Nombre de groupe
-		return (int) Math.ceil((double) nombreDistance / nombreParGroupe);
+		afficherGroupes(groupes, 1);
 	}
-	public static int obtenirTotalGroupeSurPlace(ArrayList<Stagiaire> stagiaires, int nombreParGroupe) {
-		int nombreSurPlace = 0;
-		for(Stagiaire e : stagiaires) {
-			if(e.isaDistance() == false) {
-				nombreSurPlace++;
-			}
-		}
-		System.out.println("Nombre total : " + stagiaires.size());
-		System.out.println("Nombre sur place : " + nombreSurPlace);
-		
-//		Nombre de groupe
-		return (int) Math.ceil((double) stagiaires.size() / nombreParGroupe);
-	}
-	
 	
 	/**
-	 * Prend une liste et les insèrent chacun dans un groupe parmis la liste de groupe possible
+	 * Afficher les enregistrements présent dans les groupes
 	 * 
-	 * @param ArrayList<Stagiaire> liste
-	 * @param ArrayList< ArrayList<Stagiaire> > groupe
-	 * @param booleant sens
-	 * @return ArrayList< ArrayList<Stagiaire> > groupeMisAJour
+	 * @param groupes
+	 * @param mode : 
+	 * 		[0] mode détaillé avec tailles des groupes et detaille staigiaire
+	 * 		[1] mode simple avec nom des stagiaires
 	 */
-	public static ArrayList< ArrayList<Stagiaire> > insererStagiaireDansGroupe(ArrayList<Stagiaire> liste, ArrayList< ArrayList<Stagiaire> > groupe, boolean sens){
+	public static void afficherGroupes(ArrayList< ArrayList<Stagiaire> > groupes, int mode) {
+		StringBuilder res = new StringBuilder("");
+		int i = 1;
+		for(ArrayList<Stagiaire> g : groupes) {
+			if(mode == 0) {
+				System.out.println(g.size() + " => " + g);
+			} else {
+				res.append("\nGroupe " + i + " : ");
+				for(Stagiaire s : g) {
+					res.append(s.getNom() + "  ");
+				}
+				i++;
+			}
+			
+
+		}
+		System.out.println(res.toString());
+	}
+	
+	/**
+	 * Obtenir la liste des stagiaires à distance
+	 * 
+	 * @param stagiaires : Liste de l'ensemble des stagiaires
+	 * 
+	 * @return liste des stagiaires à distance
+	 */
+	public static ArrayList<Stagiaire> obtenirGroupeADistance(ArrayList<Stagiaire> stagiaires) {
+		ArrayList<Stagiaire> resultatStagiaires = new ArrayList<>();
+		for(Stagiaire e : stagiaires) {
+			if(e.isaDistance() == true) {
+				resultatStagiaires.add(e);
+			}
+		}
+		return resultatStagiaires;
+	}
+	
+	/**
+	 * Obtenir la liste des stagiaires sur place
+	 * 
+	 * @param stagiaires : Liste de l'ensemble des stagiaires
+	 * 
+	 * @return liste des stagiaires sur place
+	 */
+	public static ArrayList<Stagiaire> obtenirGroupeSurPlace(ArrayList<Stagiaire> stagiaires) {
+		ArrayList<Stagiaire> resultatStagiaires = new ArrayList<>();
+		for(Stagiaire e : stagiaires) {
+			if(e.isaDistance() == false) {
+				resultatStagiaires.add(e);
+			}
+		}
+		return resultatStagiaires;
+	}
+	
+	/**
+	 * Prend une liste et les insèrent chacun dans un groupes parmis la liste de groupes possible
+	 * 
+	 * @param liste : liste à insérer dans le groupes pointé
+	 * @param groupes : Ensemble de tout les groupes
+	 * @param sens : Commencer les insertion du début, ou de la fin
+	 * 
+	 * @return un ensemble groupes mis à jour
+	 */
+	public static ArrayList< ArrayList<Stagiaire> > insererStagiaireDansGroupe(ArrayList<Stagiaire> liste, ArrayList< ArrayList<Stagiaire> > groupes, boolean sens){
+		ArrayList< ArrayList<Stagiaire> > resultGroupe = (ArrayList<ArrayList<Stagiaire>>) groupes.clone();
+		ArrayList<Stagiaire> tempListe = verifierDoublon(liste, groupes);;
+		
 		if(sens == true) {
 //			Tant qu'il y des élément à insérer
-			while(liste.size() > 0) {
-				for(int g = 0; g < groupe.size(); g++) {
-					inserer(g, liste, groupe);
+			while(tempListe.size() > 0) {
+				for(int g = 0; g < resultGroupe.size(); g++) {
+					inserer(g, tempListe, resultGroupe);
 				}
 			}
 		} else {
 //			Tant qu'il y des élément à insérer
-			while(liste.size() > 0) {
-				for(int g = groupe.size() - 1; g >= 0; g--) {
-					inserer(g, liste, groupe);
+			while(tempListe.size() > 0) {
+				for(int g = resultGroupe.size() - 1; g >= 0; g--) {
+					inserer(g, tempListe, resultGroupe);
 				}
 			}
 		}
 		
-		return groupe;
+		return resultGroupe;
 	}
-//	TODO methode renvoyant trop de resultat dans groupe (doublont)
 	
-	public static void inserer(int g, ArrayList<Stagiaire> liste, ArrayList< ArrayList<Stagiaire> > groupe){
+	/**
+	 * Verifie les données déjà présente dans les groupes
+	 * 
+	 * @param liste : liste à insérer à vérifier
+	 * @param  groupes : Ensemble de tout les groupes
+	 * @return une liste sans doublons
+	 */
+	public static ArrayList<Stagiaire> verifierDoublon(ArrayList<Stagiaire> liste, ArrayList< ArrayList<Stagiaire> > groupes) {
+		ArrayList<Stagiaire> result = (ArrayList<Stagiaire>) liste.clone();
+		for(Stagiaire s : liste) {
+			for(ArrayList<Stagiaire> gr : groupes) {
+				if(gr.contains(s) ) {
+					result.remove(s);
+//					System.out.println("Doublons : " + s );
+				}
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Inserer les valeurs d'une liste dans le groupes pointé par le curseur
+	 * 
+	 * /!\ Effet de bord : liste, groupes
+	 * @param g : Curseur de distribution pointant sur un groupes
+	 * @param liste : liste à insérer dans le groupes pointé
+	 * @param groupes : Ensemble de tout les groupes
+	 */
+	public static void inserer(int g, ArrayList<Stagiaire> liste, ArrayList< ArrayList<Stagiaire> > groupes){
 		int rand = 0;
 		if(liste.size() > 0) {
 			rand = getRandom(liste.size());
-//			System.out.println("Rand : " + rand);
-//			System.out.println("Taille liste : " + liste.size());
-
-		
-//		for(int s = 0; s < liste.size(); s++) {
-			
-//		Verifie que liste.get(rand) n'est pas déjà dans groupe[g]
-			boolean inGroupe = false;
-			for(ArrayList<Stagiaire> gr : groupe) {
-				if(liste.size() <= 0 || inGroupe == true || rand >= liste.size()) {
-					break;
-				}
-//				Si il reste des element dans la liste
-				for(int st = 0; st < gr.size(); st++) {
-					if(liste.size() <= 0 || inGroupe == true || rand >= liste.size()) {
-						inGroupe = true;
-						break;
-					}
-//					try {							
-////						if(st.getNom().equals(liste.get(s).getNom()) ) {
-//						if(gr.get(st).equals(liste.get(s))) {
-//							if(liste.size() > 0 && s < liste.size()) {
-//						BIS: if(gr.contains(liste.get(s)) ) {
-//					if(rand < liste.size()) {
-						if(gr.get(st).equals(liste.get(rand)) ) {
-//							if(gr.contains(liste.get(rand)) ) {
-							inGroupe = true;
-							System.out.println("Doublons : " + liste.get(rand) );
-							liste.remove(rand);
-//								System.out.println("in");
-////						Retirer l'élément en doublont
-//								liste.remove(liste.get(s));
-								break;
-//							}
-						}
-//					}
-//					} catch(IndexOutOfBoundsException e) {
-//						System.out.println("Restant de liste : " + liste );
-//					}
-				}
-//			}
-			if(inGroupe == false ) {						
-//			Choisir un élément dans la liste
-//				int rand = getRandom(liste.size());
-//				if(rand < liste.size()) {					
-					groupe.get(g).add(liste.get(rand));
-//				}
-//			Retirer l'élément insérer de la liste
-				liste.remove(rand);
-//			Arrêter le parcours de la liste
-				break;
-			}
+			groupes.get(g).add(liste.get(rand));
+			liste.remove(rand);
 		}
 	}
+
+	/**
+	 * Equilibre la tailles des groupes
+	 * 
+	 * @param groupes : Ensemble de tout les groupes
+	 * @param tailleMax : Taille maximal par groupe souhaité
+	 * @return un ensemble groupes mis à jour
+	 */
+	public static ArrayList< ArrayList<Stagiaire> > equilibrerGroupes(ArrayList< ArrayList<Stagiaire> > groupes, int tailleMax){
+		ArrayList< ArrayList<Stagiaire> > resultGroupes = (ArrayList<ArrayList<Stagiaire>>) groupes.clone();
 		
-//		return groupe;
+		ArrayList<Stagiaire> lePlusGrand = new ArrayList<>();
+		ArrayList<Stagiaire> lePlusPetit = new ArrayList<>();
+		do {
+				
+	//		Determiner le plus grand et le plus petit groupe
+			int indexLePlusGrand = 0;
+			int indexLePlusPetit = 0;
+			int max = 0;
+			int min = 100;
+			
+			for(ArrayList<Stagiaire> g : resultGroupes) {
+				if(g.size() >= max) {				
+					lePlusGrand = g;
+					max = lePlusGrand.size();
+				}
+				if(g.size() <= min) {				
+					lePlusPetit = g;
+					min = lePlusPetit.size();
+				}
+			}
+			indexLePlusGrand = resultGroupes.indexOf(lePlusGrand);
+			indexLePlusPetit = resultGroupes.indexOf(lePlusPetit);
+			
+	//		Equilibrer entre le plus grand et le plus petit
+			lePlusPetit.add( lePlusGrand.get(lePlusGrand.size() - 1) );
+			lePlusGrand.remove(lePlusGrand.size() - 1);
+			
+	//		Ajoute les modification aux groupes
+			resultGroupes.set(indexLePlusGrand, lePlusGrand);
+			resultGroupes.set(indexLePlusPetit, lePlusPetit);
+			
+		} while(lePlusGrand.size() >= tailleMax);
+		
+		return resultGroupes;
 	}
 	
+	
+	/**
+	 * Obtenir un nombre aléatoire entre 0 et max
+	 * 
+	 * @param max : Valeur maximal
+	 * @return un nombre aléatoire
+	 */
 	public static int getRandom(int max) {
 		Random rand = new Random();
 		return rand.nextInt(max);
