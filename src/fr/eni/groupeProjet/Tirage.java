@@ -197,6 +197,7 @@ public class Tirage {
 			indexLePlusGrand = resultGroupes.indexOf(lePlusGrand);
 			indexLePlusPetit = resultGroupes.indexOf(lePlusPetit);
 			
+<<<<<<< HEAD
 	//		Equilibrer entre le plus grand et le plus petit
 			lePlusPetit.add( lePlusGrand.get(lePlusGrand.size() - 1) );
 			lePlusGrand.remove(lePlusGrand.size() - 1);
@@ -206,6 +207,19 @@ public class Tirage {
 			resultGroupes.set(indexLePlusPetit, lePlusPetit);
 			
 		} while(lePlusGrand.size() >= tailleMax && lePlusPetit.size() > 1 && lePlusGrand.size() !=  lePlusPetit.size());
+=======
+			if(lePlusGrand.size() > 1) {				
+		//		Equilibrer entre le plus grand et le plus petit
+				lePlusPetit.add( lePlusGrand.get(lePlusGrand.size() - 1) );
+				lePlusGrand.remove(lePlusGrand.size() - 1);
+				
+		//		Ajoute les modification aux groupes
+				resultGroupes.set(indexLePlusGrand, lePlusGrand);
+				resultGroupes.set(indexLePlusPetit, lePlusPetit);
+			}
+			
+		} while(lePlusGrand.size() >= tailleMax && lePlusPetit.size() > 1 && lePlusGrand.size() !=  lePlusPetit.size() );
+>>>>>>> 40cf30360858915bf2b29993b74bde8615e46184
 		
 		return resultGroupes;
 	}
