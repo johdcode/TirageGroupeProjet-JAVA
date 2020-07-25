@@ -177,6 +177,7 @@ public class Tirage {
 		
 		ArrayList<Stagiaire> lePlusGrand = new ArrayList<>();
 		ArrayList<Stagiaire> lePlusPetit = new ArrayList<>();
+		boolean stop = false;
 		do {
 	//		Determiner le plus grand et le plus petit groupe
 			int indexLePlusGrand = 0;
@@ -185,11 +186,11 @@ public class Tirage {
 			int min = 100;
 			
 			for(ArrayList<Stagiaire> g : resultGroupes) {
-				if(g.size() >= max) {				
+				if(g.size() > max) {				
 					lePlusGrand = g;
 					max = lePlusGrand.size();
 				}
-				if(g.size() <= min) {				
+				if(g.size() < min) {				
 					lePlusPetit = g;
 					min = lePlusPetit.size();
 				}
@@ -197,15 +198,19 @@ public class Tirage {
 			indexLePlusGrand = resultGroupes.indexOf(lePlusGrand);
 			indexLePlusPetit = resultGroupes.indexOf(lePlusPetit);
 			
-	//		Equilibrer entre le plus grand et le plus petit
-			lePlusPetit.add( lePlusGrand.get(lePlusGrand.size() - 1) );
-			lePlusGrand.remove(lePlusGrand.size() - 1);
+			if(lePlusGrand.size() != lePlusPetit.size()) {
+		//		Equilibrer entre le plus grand et le plus petit
+				lePlusPetit.add( lePlusGrand.get(lePlusGrand.size() - 1) );
+				lePlusGrand.remove(lePlusGrand.size() - 1);
+				
+		//		Ajoute les modification aux groupes
+				resultGroupes.set(indexLePlusGrand, lePlusGrand);
+				resultGroupes.set(indexLePlusPetit, lePlusPetit);
+			} else {
+				stop = true;
+			}
 			
-	//		Ajoute les modification aux groupes
-			resultGroupes.set(indexLePlusGrand, lePlusGrand);
-			resultGroupes.set(indexLePlusPetit, lePlusPetit);
-			
-		} while(lePlusGrand.size() >= tailleMax && lePlusPetit.size() > 1 && lePlusGrand.size() !=  lePlusPetit.size());
+		} while(lePlusGrand.size() >= tailleMax && stop == false);
 		
 		return resultGroupes;
 	}
