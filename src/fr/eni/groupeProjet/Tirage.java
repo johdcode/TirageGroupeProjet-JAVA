@@ -53,15 +53,19 @@ public class Tirage {
 			}
 		}
 		
-//		Insertion & équilibrage
-		groupes = insererStagiaireDansGroupe(stagiairesCDA, groupes, false);
-		groupes = insererStagiaireDansGroupe(stagiairesF, groupes, true);
-		groupes = insererStagiaireDansGroupe(stagiairesM, groupes, false);
-		groupes = insererStagiaireDansGroupe(stagiairesD2WM, groupes, true);
-		
-		groupes = equilibrerGroupes(groupes, nombreParGroupeMaximum);
-		
-		afficherGroupes(groupes, 1);
+		if(listeUtilise.size() > 0) {			
+//			Insertion & équilibrage
+			groupes = insererStagiaireDansGroupe(stagiairesCDA, groupes, false);
+			groupes = insererStagiaireDansGroupe(stagiairesF, groupes, true);
+			groupes = insererStagiaireDansGroupe(stagiairesM, groupes, false);
+			groupes = insererStagiaireDansGroupe(stagiairesD2WM, groupes, true);
+			
+			groupes = equilibrerGroupes(groupes, nombreParGroupeMaximum);
+			
+			afficherGroupes(groupes, 1);
+		} else {
+			System.out.println("\nAucun élément à tiré.\n");
+		}
 	}
 	
 	/**
@@ -174,7 +178,6 @@ public class Tirage {
 		ArrayList<Stagiaire> lePlusGrand = new ArrayList<>();
 		ArrayList<Stagiaire> lePlusPetit = new ArrayList<>();
 		do {
-				
 	//		Determiner le plus grand et le plus petit groupe
 			int indexLePlusGrand = 0;
 			int indexLePlusPetit = 0;
@@ -194,15 +197,17 @@ public class Tirage {
 			indexLePlusGrand = resultGroupes.indexOf(lePlusGrand);
 			indexLePlusPetit = resultGroupes.indexOf(lePlusPetit);
 			
-	//		Equilibrer entre le plus grand et le plus petit
-			lePlusPetit.add( lePlusGrand.get(lePlusGrand.size() - 1) );
-			lePlusGrand.remove(lePlusGrand.size() - 1);
+			if(lePlusGrand.size() > 1) {				
+		//		Equilibrer entre le plus grand et le plus petit
+				lePlusPetit.add( lePlusGrand.get(lePlusGrand.size() - 1) );
+				lePlusGrand.remove(lePlusGrand.size() - 1);
+				
+		//		Ajoute les modification aux groupes
+				resultGroupes.set(indexLePlusGrand, lePlusGrand);
+				resultGroupes.set(indexLePlusPetit, lePlusPetit);
+			}
 			
-	//		Ajoute les modification aux groupes
-			resultGroupes.set(indexLePlusGrand, lePlusGrand);
-			resultGroupes.set(indexLePlusPetit, lePlusPetit);
-			
-		} while(lePlusGrand.size() >= tailleMax);
+		} while(lePlusGrand.size() >= tailleMax && lePlusPetit.size() > 1 && lePlusGrand.size() !=  lePlusPetit.size() );
 		
 		return resultGroupes;
 	}
